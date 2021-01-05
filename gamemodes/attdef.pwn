@@ -1793,6 +1793,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				else
 				SendClientMessage(playerid, -1, "GG"
 		}
+		return 1;
 	}
 	if(dialogid == DIALOG_LEAGUE_STATS)
 	{
