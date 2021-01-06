@@ -600,10 +600,10 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 
 		    Player[killerid][RoundKills]++;
 		    Player[killerid][TotalKills]++;
-		    Player[killerid][TKills]++;
+		    Player[killerid][ATimeKills]++;
 		    Player[playerid][RoundDeaths]++;
 		    Player[playerid][TotalDeaths]++;
-		    Player[playerid][TDeaths]++;
+		    Player[playerid][ATimeDeaths]++;
 
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
