@@ -1741,60 +1741,6 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	    }
 	    return 1;
 	}
-	if(dialogid == DIALOG_TOPS)
-	{
-		if(response)
-		{
-			switch(listitem)
-			{
-				case 0:
-				{
-  	 				TopKills(playerid);
-			    	return 1;
-				}
-
-				case 1:
-				{
-				
-				}
-				case 2:
-				{
-					
-				}
-				case 3:
-				{
-					
-				}
-				case 4:
-				{
-					
-				}
-				case 5:
-				{
-					
-				}
-				case 6:
-				{
-					
-				}
-				case 7:
-				{
-					
-				}
-				case 8:
-				{
-					
-				}
-				case 9:
-				{
-					
-				}
-			}
-				else
-				SendClientMessage(playerid, -1, "GG"
-		}
-		return 1;
-	}
 	if(dialogid == DIALOG_LEAGUE_STATS)
 	{
 	    if(response)
@@ -2144,10 +2090,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 	                format(statsSTR[0], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Country: %s\n\n"COL_PRIM"- {FFFFFF}Round Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Total Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}FPS: \t\t\t%d\n"COL_PRIM"- {FFFFFF}Round Deaths: \t%.0f\t\t"COL_PRIM"- {FFFFFF}Total Deaths: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Ping: \t\t\t%d\n",Country,Player[CID][RoundKills],Player[CID][TotalKills], Player[CID][FPS], RD, TD, GetPlayerPing(CID));
 					format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], NetStats_PacketLossPercent(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
-					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d", Player[CID][DuelsWon], Player[CID][DuelsLost]);
+					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d\n", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d", Player[playerid][ATimeKills], Player[playerid][ATimeDeaths]);
 					new TotalStr[1400];
-					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3]);
+					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4]);
 
 					ShowPlayerDialog(playerid, DIALOG_CLICK_STATS, DIALOG_STYLE_MSGBOX, namee, TotalStr, "Close", "");
                 }
@@ -3604,6 +3550,68 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		{
 		    ShowIntroTextDraws(playerid);
 		    ShowPlayerClassSelection(playerid);
+		}
+		return 1;
+	}
+	if(dialogid == DIALOG_TOP)
+	{
+		if(response)
+		{
+			switch(listitem)
+			{
+				case 0:
+				{
+					
+					new DBResult:result;
+                    new message[50];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `Tkills` FROM `Players` ORDER BY `TKills` DESC LIMIT 10");
+                    new fulldialog[3000], str[200];       
+                    fulldialog = "{ffffff}Place\tKills\t  {FF9900}Nick\n\n";
+					new name[MAX_PLAYER_NAME];
+					new killer[50];
+                    for (new i; i < 10; i++)
+                    {
+                        db_get_field_assoc(result, "Name", name, MAX_PLAYER_NAME);
+                        db_get_field_assoc(result, "TKills", killer, 50);
+                        format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, killer, name);
+                        strcat(fulldialog, message);
+                        db_next_row(result);
+                    }
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Killers", fulldialog, "Select", "");
+                    db_free_result(result);
+					return 1;
+				}
+
+				case 1:
+				{
+					new DBResult:result;
+                    new message[50];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `TDeaths` FROM `Players` ORDER BY `TDeaths` DESC LIMIT 10");
+                    new fulldialog[3000], str[200];       
+                    fulldialog = "{ffffff}Place\tDeaths\t  {FF9900}Nick\n\n";
+					new name[MAX_PLAYER_NAME];
+					new killer[50];
+                    for (new i; i < 10; i++)
+                    {
+                        db_get_field_assoc(result, "Name", name, MAX_PLAYER_NAME);
+                        db_get_field_assoc(result, "TDeaths", killer, 50);
+                        format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, killer, name);
+                        strcat(fulldialog, message);
+                        db_next_row(result);
+                    }
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaths", fulldialog, "Select", "");
+                    db_free_result(result);
+				}
+				case 2:
+				{
+					SendClientMessage(playerid, -1, "Top Online");
+				}
+				case 3:
+				{
+					SendClientMessage(playerid, -1, "Top DMG");
+				}
+				
+			}
 		}
 		return 1;
 	}
@@ -8990,11 +8998,12 @@ YCMD:remove(playerid, params[], help)
 }
 YCMD:tops(playerid, params[], help)
 {
+	//if(Player[playerid][Level] < 0 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
 	if(help)
 	{
 		SendCommandHelpMessage(playerid, "Show dialog with top players");
 	}
-	ShowPlayerDialog(playerid, DIALOG_TOPS, DIALOG_STYLE_LIST, "Tops", "Top Killers\nTop Death\nTop Online\nTop DMG\nTOP DEAGLE\nTOP SNIPER\nTOP PUNCH\nTOP SHOTGUN\nTOP M4\nTOP SPAS \n", "Select", "Exit");
+	ShowPlayerDialog(playerid, DIALOG_TOP, DIALOG_STYLE_LIST, "Tops", "Top Killers\nTop Death\nTop Online\nTop DMG\n", "Select", "Exit");
 	return 1;
 }
 YCMD:end(playerid, params[], help)
@@ -10808,3 +10817,11 @@ public OnPlayerClickPlayer(playerid, clickedplayerid, source)
 	return 1;
 }
 
+stock GetPlayerID(Names[])
+{
+    foreach(new i:Player)
+    {
+        if(!strcmp(Names, Player[i][pName])) return i;
+    }    
+    return -1;
+}
