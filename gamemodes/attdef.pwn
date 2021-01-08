@@ -3569,7 +3569,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     fulldialog = "{ffffff}Place\tKills\t  {FF9900}Nick\n\n";
                     for (new i; i < 10; i++)
 					{
-						new killers[15], names[15];
+						new names[15];
 						db_get_field_assoc(result, "Name", names, sizeof(names));
 						new test_str[15];
 						new test_int = 0;
@@ -3594,7 +3594,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     fulldialog = "{ffffff}Place\tDeaths\t  {FF9900}Nick\n\n";
                     for (new i; i < 10; i++)
 					{
-						new killers[15], names[15];
+						new names[15];
 						db_get_field_assoc(result, "Name", names, sizeof(names));
 						new test_str[15];
 						new test_int = 0;
