@@ -553,6 +553,12 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s bombed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
 		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
 		        }
+				case WEAPON_DEAGLE:
+				{
+					PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s raped you", Player[killerid][Name], MAIN_TEXT_COLOUR));
+					PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
+					Player[killerid][AKillDGL]++;
+				}
 		        default:
 			    {
 				    switch(random(4))
@@ -3677,6 +3683,61 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 			}
 		}
 		return 1;
+	}
+	if(dialogid == DIALOG_TOPWEAP)
+	{
+		if(response)
+		{
+			switch(listitem)
+			{
+				case 0:
+				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWD` FROM `Players` ORDER BY `AKWD` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWD", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaglers", fulldialog, "Select", "");
+                    db_free_result(result);
+				}
+				case 1:
+				{
+					
+				}
+				case 2:
+				{
+					
+				}
+				case 3:
+				{
+					
+				}
+				case 4:
+				{
+					
+				}
+				case 5:
+				{
+					
+				}
+			}
+		}
 	}
 	if(dialogid == DIALOG_STYLE)
 	{
@@ -9068,6 +9129,16 @@ YCMD:tops(playerid, params[], help)
 		SendCommandHelpMessage(playerid, "Show dialog with top players");
 	}
 	ShowPlayerDialog(playerid, DIALOG_TOP, DIALOG_STYLE_LIST, "Tops", "Top Killers\nTop Death\nTop Online\nTop DMG\nTop Dueler\n", "Select", "Exit");
+	return 1;
+}
+YCMD:topweap(playerid, params[], help)
+{
+	//if(Player[playerid][Level] < 0 && !IsPlayerAdmin(playerid)) return SendErrorMessage(playerid,"You need to be a higher admin level.");
+	if(help)
+	{
+		SendCommandHelpMessage(playerid, "Show dialog with top players with weapons");
+	}
+	ShowPlayerDialog(playerid, DIALOG_TOPWEAP, DIALOG_STYLE_LIST, "Top Players with Weapons", "{FFFFFF}Top Deagle\n{FFFFFF}Top Sniper\n{FFFFFF}Top Punch\n{FFFFFF}Top Shotgun\n{FFFFFF}Top M4\n{FFFFFF}Top Spas\n", "Select", "Exit");
 	return 1;
 }
 YCMD:end(playerid, params[], help)
