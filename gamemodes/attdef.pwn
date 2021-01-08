@@ -3645,7 +3645,32 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 damagers", fulldialog, "Select", "");
                     db_free_result(result);
 				}
-				
+				case 4:
+				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `DWon` FROM `Players` ORDER BY `DWon` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "DWon", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 duelers {ffffff}(/tops)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 duelers", fulldialog, "Select", "");
+                    db_free_result(result);
+				}
 			}
 		}
 		return 1;
@@ -9039,7 +9064,7 @@ YCMD:tops(playerid, params[], help)
 	{
 		SendCommandHelpMessage(playerid, "Show dialog with top players");
 	}
-	ShowPlayerDialog(playerid, DIALOG_TOP, DIALOG_STYLE_LIST, "Tops", "Top Killers\nTop Death\nTop Online\nTop DMG\n", "Select", "Exit");
+	ShowPlayerDialog(playerid, DIALOG_TOP, DIALOG_STYLE_LIST, "Tops", "Top Killers\nTop Death\nTop Online\nTop DMG\nTop Dueler\n", "Select", "Exit");
 	return 1;
 }
 YCMD:end(playerid, params[], help)
