@@ -3564,6 +3564,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					
 					new DBResult:result;
                     new message[50];
+					new iString[128];
                     result = db_query(sqliteconnection, "SELECT `Name`, `Tkills` FROM `Players` ORDER BY `TKills` DESC LIMIT 10");
                     new fulldialog[3000];       
                     fulldialog = "{ffffff}Place\tKills\t  {FF9900}Nick\n\n";
@@ -3580,6 +3581,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 killers {ffffff}(/tops)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Killers", fulldialog, "Select", "");
                     db_free_result(result);
 					return 1;
@@ -3589,6 +3592,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				{
 					new DBResult:result;
                     new message[50];
+					new iString[128];
                     result = db_query(sqliteconnection, "SELECT `Name`, `TDeaths` FROM `Players` ORDER BY `TDeaths` DESC LIMIT 10");
                     new fulldialog[3000];       
                     fulldialog = "{ffffff}Place\tDeaths\t  {FF9900}Nick\n\n";
@@ -3605,6 +3609,8 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 deaths {ffffff}(/tops)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaths", fulldialog, "Select", "");
                     db_free_result(result);
 				}
