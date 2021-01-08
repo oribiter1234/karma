@@ -3565,17 +3565,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					new DBResult:result;
                     new message[50];
                     result = db_query(sqliteconnection, "SELECT `Name`, `Tkills` FROM `Players` ORDER BY `TKills` DESC LIMIT 10");
-                    new fulldialog[3000], str[200];       
+                    new fulldialog[3000];       
                     fulldialog = "{ffffff}Place\tKills\t  {FF9900}Nick\n\n";
-					new name[MAX_PLAYER_NAME];
-					new killer[50];
                     for (new i; i < 10; i++)
-                    {
-                        db_get_field_assoc(result, "Name", name, MAX_PLAYER_NAME);
-                        db_get_field_assoc(result, "TKills", killer, 50);
-                        format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, killer, name);
-                        strcat(fulldialog, message);
-                        db_next_row(result);
+					{
+						new killers[15], names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "TKills", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
                     }
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Killers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3587,17 +3590,20 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					new DBResult:result;
                     new message[50];
                     result = db_query(sqliteconnection, "SELECT `Name`, `TDeaths` FROM `Players` ORDER BY `TDeaths` DESC LIMIT 10");
-                    new fulldialog[3000], str[200];       
+                    new fulldialog[3000];       
                     fulldialog = "{ffffff}Place\tDeaths\t  {FF9900}Nick\n\n";
-					new name[MAX_PLAYER_NAME];
-					new killer[50];
                     for (new i; i < 10; i++)
-                    {
-                        db_get_field_assoc(result, "Name", name, MAX_PLAYER_NAME);
-                        db_get_field_assoc(result, "TDeaths", killer, 50);
-                        format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, killer, name);
-                        strcat(fulldialog, message);
-                        db_next_row(result);
+					{
+						new killers[15], names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "TDeaths", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
                     }
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaths", fulldialog, "Select", "");
                     db_free_result(result);
