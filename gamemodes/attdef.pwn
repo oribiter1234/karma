@@ -553,12 +553,6 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				    PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s bombed you", Player[killerid][Name], MAIN_TEXT_COLOUR));
 		            PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou bombed ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
 		        }
-				case WEAPON_DEAGLE:
-				{
-					PlayerTextDrawSetString(playerid, DeathText[playerid][1], sprintf("~r~~h~%s%s raped you", Player[killerid][Name], MAIN_TEXT_COLOUR));
-					PlayerTextDrawSetString(killerid, DeathText[killerid][0], sprintf("%sYou raped ~r~~h~%s", MAIN_TEXT_COLOUR, Player[playerid][Name]));
-					Player[killerid][AKillDGL]++;
-				}
 		        default:
 			    {
 				    switch(random(4))
@@ -590,7 +584,6 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			    
         PlayerTextDrawShow(killerid, DeathText[killerid][0]);
         PlayerTextDrawShow(playerid, DeathText[playerid][1]);
-
 	    SetTimerEx("DeathMessageF", 4000, false, "ii", killerid, playerid);
 
 		if(Player[playerid][Playing] == true && Player[killerid][Playing] == true && AllowStartBase != false)
@@ -610,7 +603,10 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 		    Player[playerid][RoundDeaths]++;
 		    Player[playerid][TotalDeaths]++;
 		    Player[playerid][ATimeDeaths]++;
-
+			if(reason == WEAPON_DEAGLE)
+			{
+				Player[killerid][AKillDGL]++;
+			}
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
@@ -2098,7 +2094,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], NetStats_PacketLossPercent(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d\n", Player[CID][DuelsWon], Player[CID][DuelsLost]);
-					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
+					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d\n", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
 					format(statsSTR[5], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Deagle: \t\t%d\t\t", Player[CID][AKillDGL]);
 					new TotalStr[1400];
 					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5]);
