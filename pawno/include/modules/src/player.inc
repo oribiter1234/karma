@@ -175,10 +175,10 @@ InitPlayer(playerid)
 	Player[playerid][TotalKills] = 0;
 	Player[playerid][TotalDeaths] = 0;
 	Player[playerid][TotalDamage] = 0;
-	Player[playerid][ATKills] = 0;
+	Player[playerid][ATimeKills] = 0;
 	Player[playerid][ATDeaths] = 0;
-	Player[playerid][TKills] = 0;
-	Player[playerid][TDeaths] = 0;
+	Player[playerid][ATimeKills] = 0;
+	Player[playerid][ATimeDeaths] = 0;
 	Player[playerid][ACKick] = 0;
 	Player[playerid][IsSpectatingID] = -1;
 	Player[playerid][OutOfArena] = MAX_ZONE_LIMIT_WARNINGS;
@@ -417,6 +417,10 @@ LoginPlayer(playerid, DBResult:res)
     db_get_field_assoc(res, "TDeaths", iString, sizeof(iString));
     Player[playerid][ATimeDeaths] = strval(iString);
 
+	// Load all time dmg
+	db_get_field_assoc(res, "TTDMG", iString, sizeof(iString));
+	Player[playerid][ATDMG] = strval(iString);
+
     // Check if player is ac-forced
     if(Player[playerid][AntiCheatForced] == 1) {
         if(!CAC_GetStatus(playerid)) {
@@ -466,6 +470,7 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][ATKills]   =   Player[playerid][ATimeKills];
 			SaveVariables[i][ATDeaths]  =   Player[playerid][ATimeDeaths];
+			SaveVariables[i][ATDMG]		= 	Player[playerid][ATDMG];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
@@ -553,6 +558,7 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][TDamage] 	= 	Player[playerid][TotalDamage];
 			SaveVariables[i][ATKills]   =   Player[playerid][ATimeKills];
 			SaveVariables[i][ATDeaths]  =   Player[playerid][ATimeDeaths];
+			SaveVariables[i][ATDMG]		= 	Player[playerid][ATDMG];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
@@ -652,6 +658,7 @@ LoadPlayerVariables(playerid)
 			 	Player[playerid][TotalBulletsFired] = 	SaveVariables[i][tBulletsShot];
 			 	Player[playerid][ATimeKills]		=   SaveVariables[i][ATKills];
 			 	Player[playerid][ATimeDeaths]		=   SaveVariables[i][ATDeaths];
+				Player[playerid][ATDMG]				=	SaveVariables[i][ATDMG];
 				
 				#if defined _league_included
 				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
@@ -687,6 +694,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][TotalDamage] 		= 	SaveVariables[i][TDamage];
 				Player[playerid][ATimeKills]		=   SaveVariables[i][ATKills];
 				Player[playerid][ATimeDeaths]		=   SaveVariables[i][ATDeaths];
+				Player[playerid][ATimeDMG] 			= 	SaveVariables[i][ATDMG];
 				Player[playerid][RoundPlayed] 		= 	SaveVariables[i][TPlayed];
 				Player[playerid][Accuracy]      	=   SaveVariables[i][iAccuracy];
 			 	Player[playerid][TotalshotsHit]		=	SaveVariables[i][tshotsHit];
@@ -739,6 +747,7 @@ LoadPlayerVariables(playerid)
 			Player[playerid][TotalDamage] 	= 	SaveVariables[i][TDamage];
 			Player[playerid][ATimeKills]	=   SaveVariables[i][ATKills];
 			Player[playerid][ATimeDeaths]	=   SaveVariables[i][ATDeaths];
+			Player[playerid][ATimeDMG]		= 	SaveVariables[i][ATDMG];
 			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
 			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
 		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
@@ -895,10 +904,7 @@ ResetSaveVariables(index) {
     SaveVariables[index][RKills] = 0;
 	SaveVariables[index][RDeaths] = 0;
     SaveVariables[index][RDamage] = 0;
-    SaveVariables[index][TKills] = 0;
     SaveVariables[index][TDeaths] = 0;
-    SaveVariables[index][ATKills] = 0;
-    SaveVariables[index][ATDeaths] = 0;
     SaveVariables[index][TDamage] = 0;
 	SaveVariables[index][sWasInBase] = false;
     SaveVariables[index][RoundID] = -1;

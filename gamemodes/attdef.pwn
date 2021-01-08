@@ -1513,6 +1513,7 @@ HandlePlayerDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 			Player[issuerid][shotsHit] ++;
 			Player[issuerid][RoundDamage] += rounded_amount;
 			Player[issuerid][TotalDamage] += rounded_amount;
+			Player[issuerid][ATDMG] += rounded_amount;
 			UpdateRoundKillDmgTDmg(issuerid);
 		}
 	}
@@ -3620,7 +3621,29 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 3:
 				{
-					SendClientMessage(playerid, -1, "Top DMG");
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `TTDMG` FROM `Players` ORDER BY `TTDMG` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\tDMG\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "TTDMG", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 damagers {ffffff}(/tops)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 damagers", fulldialog, "Select", "");
+                    db_free_result(result);
 				}
 				
 			}
@@ -3706,6 +3729,7 @@ public OnPlayerClickTextDraw(playerid, Text:clickedid)
    				Player[i][TotalKills] = 0;
 				Player[i][TotalDeaths] = 0;
 				Player[i][TotalDamage] = 0;
+				
 				Player[i][RoundPlayed] = 0;
 			    Player[i][TotalBulletsFired] = 0;
 			    Player[i][TotalshotsHit] = 0;
