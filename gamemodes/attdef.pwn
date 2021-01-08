@@ -2067,7 +2067,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 case 0:
                 {
-	                new statsSTR[5][300], namee[60], CID, Country[128], techInfo[100];
+	                new statsSTR[6][300], namee[60], CID, Country[128], techInfo[100];
 				    CID = LastClickedPlayer[playerid];
 
 					format(namee, sizeof(namee), "{FF3333}Player {FFFFFF}%s {FF3333}Stats", Player[CID][Name]);
@@ -2099,8 +2099,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d\n", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
+					format(statsSTR[5], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Deagle: \t\t%d\t\t", Player[CID][AKillDGL]);
 					new TotalStr[1400];
-					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4]);
+					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5]);
 
 					ShowPlayerDialog(playerid, DIALOG_CLICK_STATS, DIALOG_STYLE_MSGBOX, namee, TotalStr, "Close", "");
                 }

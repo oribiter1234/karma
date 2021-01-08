@@ -1221,6 +1221,8 @@ UpdateRoundKillDmgTDmg(playerid)
 	db_free_result(db_query(sqliteconnection, str));
 	format(str, sizeof(str), "UPDATE Players SET TTDMG = %d WHERE Name = '%q'", Player[playerid][ATDMG], Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET AKWD = %d WHERE Name = '%q'", Player[playerid][AKillDGL], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
     return 1;
 }
