@@ -2092,7 +2092,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(statsSTR[1], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Round Damage: \t%d\t\t"COL_PRIM"- {FFFFFF}Total Damage:   \t%d\t\t"COL_PRIM"- {FFFFFF}Packet-Loss:   \t%.1f\n\n"COL_PRIM"- {FFFFFF}Player Weather: \t%d\t\t"COL_PRIM"- {FFFFFF}Chat Channel: \t%d\t\t"COL_PRIM"- {FFFFFF}In Round: \t\t%s\n",Player[CID][RoundDamage],Player[CID][TotalDamage], NetStats_PacketLossPercent(CID), Player[CID][Weather], (MC == YC ? YC : -1), (Player[CID][Playing] == true ? ("Yes") : ("No")));
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d\n", Player[CID][DuelsWon], Player[CID][DuelsLost]);
-					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d", Player[playerid][ATimeKills], Player[playerid][ATimeDeaths], Player[playerid][ATDMG]);
+					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
 					new TotalStr[1400];
 					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4]);
 
@@ -2208,6 +2208,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Player[playerid][NetCheck] = 1;
 		    Player[playerid][DuelsWon] = 0;
 		    Player[playerid][DuelsLost] = 0;
+			Player[playerid][ATimeDeaths] = 0;
+			Player[playerid][ATimeKills] = 0;
+			Player[playerid][ATimeDMG] = 0;
 		}
 		else
 		{

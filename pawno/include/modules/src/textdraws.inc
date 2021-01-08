@@ -1212,10 +1212,15 @@ PlayerTextDrawSetSelectable(playerid, RoundKillDmgTDmg[playerid], 0);
 UpdateRoundKillDmgTDmg(playerid)
 {
     new iString[160];
-	
+	new str[200];
 	//format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 	format(iString, sizeof(iString), "~y~Damage: ~r~%d~n~~y~Total Dmg: ~r~%d", Player[playerid][RoundDamage], Player[playerid][TotalDamage]);
-	
+	format(str, sizeof(str), "UPDATE Players SET TKills = %d WHERE Name = '%q'", Player[playerid][ATimeKills], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET TDeaths = %d WHERE Name = '%q'", Player[playerid][ATimeDeaths], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET TTDMG = %d WHERE Name = '%q'", Player[playerid][ATDMG], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
     return 1;
 }
