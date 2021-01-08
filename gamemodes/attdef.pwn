@@ -623,6 +623,14 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			{
 				Player[killerid][AKillSHT]++;
 			}
+			if(reason == WEAPON_RIFLE)
+			{
+				Player[killerid][AKillPNCH]++;
+			}
+			if(reason == WEAPON_AK47)
+			{
+				Player[killerid][AKillAK]++;
+			}
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
@@ -2112,7 +2120,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d\n", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d\n", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
 					format(statsSTR[5], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Deagle: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Shotgun: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With M4: \t\t%d\n", Player[CID][AKillDGL], Player[CID][AKillSHT],Player[CID][AKillM]);
-					format(statsSTR[6], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Sniper: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Spas: \t\t%d\t\t", Player[CID][AKillSN], Player[CID][AKillSP]);
+					format(statsSTR[6], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Sniper: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Spas: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Rifle: \t\t%d\t\t", Player[CID][AKillSN], Player[CID][AKillSP], Player[CID][AKillPNCH]);
 					new TotalStr[1400];
 					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5],statsSTR[6]);
 
@@ -3858,6 +3866,58 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaglers", fulldialog, "Select", "");
+                    db_free_result(result);
+				}
+				case 6:
+				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWP` FROM `Players` ORDER BY `AKWP` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWP", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 rifles {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 rifles", fulldialog, "Select", "");
+                    db_free_result(result);
+				}
+				case 7:
+				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWAK` FROM `Players` ORDER BY `AKWAK` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWAK", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
+					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 ak-47 {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 ak-47", fulldialog, "Select", "");
                     db_free_result(result);
 				}
 			}
@@ -9262,7 +9322,7 @@ YCMD:topweap(playerid, params[], help)
 	{
 		SendCommandHelpMessage(playerid, "Show dialog with top players with weapons");
 	}
-	ShowPlayerDialog(playerid, DIALOG_TOPWEAP, DIALOG_STYLE_LIST, "Top Players with Weapons", "{FFFFFF}Top Deagle\n{FFFFFF}Top Sniper\n{FFFFFF}\n{FFFFFF}Top Shotgun\n{FFFFFF}Top M4\n{FFFFFF}Top Spas\n", "Select", "Exit");
+	ShowPlayerDialog(playerid, DIALOG_TOPWEAP, DIALOG_STYLE_LIST, "Top Players with Weapons", "{FFFFFF}Top Deagle\n{FFFFFF}Top Sniper\n{FFFFFF}\n{FFFFFF}Top Shotgun\n{FFFFFF}Top M4\n{FFFFFF}Top Spas\n{FFFFFF}Top Rifles\n{FFFFFF}Top AK-47\n", "Select", "Exit");
 	return 1;
 }
 YCMD:end(playerid, params[], help)
