@@ -607,6 +607,22 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			{
 				Player[killerid][AKillDGL]++;
 			}
+			if(reason == WEAPON_M4)
+			{
+				Player[killerid][AKillM]++;
+			}
+			if(reason == WEAPON_SNIPER)
+			{
+				Player[killerid][AKillSN]++;
+			}
+			if(reason == WEAPON_SHOTGSPA)
+			{
+				Player[killerid][AKillSP]++;
+			}
+			if(reason == WEAPON_SHOTGUN)
+			{
+				Player[killerid][AKillSHT]++;
+			}
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
@@ -2063,7 +2079,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 case 0:
                 {
-	                new statsSTR[6][300], namee[60], CID, Country[128], techInfo[100];
+	                new statsSTR[7][300], namee[60], CID, Country[128], techInfo[100];
 				    CID = LastClickedPlayer[playerid];
 
 					format(namee, sizeof(namee), "{FF3333}Player {FFFFFF}%s {FF3333}Stats", Player[CID][Name]);
@@ -2095,9 +2111,10 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(statsSTR[2], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Player Time: \t\t%d\t\t"COL_PRIM"- {FFFFFF}DM ID: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Hit Sound: \t\t%d\n"COL_PRIM"- {FFFFFF}Player NetCheck: \t%s\t"COL_PRIM"- {FFFFFF}Player Level: \t%d\t\t"COL_PRIM"- {FFFFFF}Get Hit Sound: \t%d\n", Player[CID][Time], (Player[CID][DMReadd] > 0 ? Player[CID][DMReadd] : -1), Player[CID][HitSound], (Player[CID][NetCheck] == 1 ? ("Enabled") : ("Disabled")), Player[CID][Level], Player[CID][GetHitSound]);
 					format(statsSTR[3], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Duels Won: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Duels Lost: \t\t%d\n", Player[CID][DuelsWon], Player[CID][DuelsLost]);
 					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d\n", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
-					format(statsSTR[5], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Deagle: \t\t%d\t\t", Player[CID][AKillDGL]);
+					format(statsSTR[5], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Deagle: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Shotgun: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With M4: \t\t%d\n", Player[CID][AKillDGL], Player[CID][AKillSHT],Player[CID][AKillM]);
+					format(statsSTR[6], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Sniper: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Spas: \t\t%d\t\t", Player[CID][AKillSN], Player[CID][AKillSP]);
 					new TotalStr[1400];
-					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5]);
+					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5],statsSTR[6]);
 
 					ShowPlayerDialog(playerid, DIALOG_CLICK_STATS, DIALOG_STYLE_MSGBOX, namee, TotalStr, "Close", "");
                 }
@@ -3715,23 +3732,133 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 				}
 				case 1:
 				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWSN` FROM `Players` ORDER BY `AKWSN` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWSN", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
 					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 snipers {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 snipers", fulldialog, "Select", "");
+                    db_free_result(result);
 				}
 				case 2:
 				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWSHT` FROM `Players` ORDER BY `AKWSHT` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWSHT", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
 					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 shotguns {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 shotguns", fulldialog, "Select", "");
+                    db_free_result(result);
 				}
 				case 3:
 				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWM` FROM `Players` ORDER BY `AKWM` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWM", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
 					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 m4's {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 m4's", fulldialog, "Select", "");
+                    db_free_result(result);
 				}
 				case 4:
 				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWS` FROM `Players` ORDER BY `AKWS` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWS", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
 					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaglers", fulldialog, "Select", "");
+                    db_free_result(result);
 				}
 				case 5:
 				{
+					new DBResult:result;
+                    new message[50];
+					new iString[128];
+                    result = db_query(sqliteconnection, "SELECT `Name`, `AKWD` FROM `Players` ORDER BY `AKWD` DESC LIMIT 10");
+                    new fulldialog[3000];       
+                    fulldialog = "{ffffff}Place\t Duels Win\t  {FF9900}Nick\n\n";
+                    for (new i; i < 10; i++)
+					{
+						new names[15];
+						db_get_field_assoc(result, "Name", names, sizeof(names));
+						new test_str[15];
+						new test_int = 0;
+						db_get_field_assoc(result, "AKWD", test_str, sizeof(test_str));
+						test_int = strval(test_str);
+						db_next_row(result);
+						format(message, sizeof(message), "{ffffff}%d\t %d\t  {FF9900}%s\n", i + 1, test_int, names);
+						strcat(fulldialog, message);
 					
+                    }
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
+					SendClientMessageToAll(-1, iString);
+                    ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaglers", fulldialog, "Select", "");
+                    db_free_result(result);
 				}
 			}
 		}
@@ -9135,7 +9262,7 @@ YCMD:topweap(playerid, params[], help)
 	{
 		SendCommandHelpMessage(playerid, "Show dialog with top players with weapons");
 	}
-	ShowPlayerDialog(playerid, DIALOG_TOPWEAP, DIALOG_STYLE_LIST, "Top Players with Weapons", "{FFFFFF}Top Deagle\n{FFFFFF}Top Sniper\n{FFFFFF}Top Punch\n{FFFFFF}Top Shotgun\n{FFFFFF}Top M4\n{FFFFFF}Top Spas\n", "Select", "Exit");
+	ShowPlayerDialog(playerid, DIALOG_TOPWEAP, DIALOG_STYLE_LIST, "Top Players with Weapons", "{FFFFFF}Top Deagle\n{FFFFFF}Top Sniper\n{FFFFFF}\n{FFFFFF}Top Shotgun\n{FFFFFF}Top M4\n{FFFFFF}Top Spas\n", "Select", "Exit");
 	return 1;
 }
 YCMD:end(playerid, params[], help)

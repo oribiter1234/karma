@@ -1212,7 +1212,7 @@ PlayerTextDrawSetSelectable(playerid, RoundKillDmgTDmg[playerid], 0);
 UpdateRoundKillDmgTDmg(playerid)
 {
     new iString[160];
-	new str[200];
+	new str[400];
 	//format(iString, sizeof(iString), "%sKills %s%d~n~%sDamage %s%d~n~%sTotal Dmg %s%d", MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundKills], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][RoundDamage], MAIN_TEXT_COLOUR, TDC[Player[playerid][Team]], Player[playerid][TotalDamage]);
 	format(iString, sizeof(iString), "~y~Damage: ~r~%d~n~~y~Total Dmg: ~r~%d", Player[playerid][RoundDamage], Player[playerid][TotalDamage]);
 	format(str, sizeof(str), "UPDATE Players SET TKills = %d WHERE Name = '%q'", Player[playerid][ATimeKills], Player[playerid][Name]);
@@ -1222,6 +1222,16 @@ UpdateRoundKillDmgTDmg(playerid)
 	format(str, sizeof(str), "UPDATE Players SET TTDMG = %d WHERE Name = '%q'", Player[playerid][ATDMG], Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, str));
 	format(str, sizeof(str), "UPDATE Players SET AKWD = %d WHERE Name = '%q'", Player[playerid][AKillDGL], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET AKWP = %d WHERE Name = '%q'", Player[playerid][AKillPNCH], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET AKWM = %d WHERE Name = '%q'", Player[playerid][AKillM], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET AKWSN = %d WHERE Name = '%q'", Player[playerid][AKillSN], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET AKWS = %d WHERE Name = '%q'", Player[playerid][AKillSP], Player[playerid][Name]);
+	db_free_result(db_query(sqliteconnection, str));
+	format(str, sizeof(str), "UPDATE Players SET AKWSHT = %d WHERE Name = '%q'", Player[playerid][AKillSHT], Player[playerid][Name]);
 	db_free_result(db_query(sqliteconnection, str));
 	PlayerTextDrawSetString(playerid, RoundKillDmgTDmg[playerid], iString);
     return 1;

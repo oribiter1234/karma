@@ -179,6 +179,11 @@ InitPlayer(playerid)
 	Player[playerid][ATimeKills] = 0;
 	Player[playerid][ATimeDeaths] = 0;
 	Player[playerid][AKillDGL] = 0;
+	Player[playerid][AKillPNCH] = 0;
+	Player[playerid][AKillM] = 0;
+	Player[playerid][AKillSHT] = 0;
+	Player[playerid][AKillSP] = 0;
+	Player[playerid][AKillSN] = 0;
 	Player[playerid][ACKick] = 0;
 	Player[playerid][IsSpectatingID] = -1;
 	Player[playerid][OutOfArena] = MAX_ZONE_LIMIT_WARNINGS;
@@ -423,7 +428,27 @@ LoginPlayer(playerid, DBResult:res)
 
 	// Load kills with deagle
 	db_get_field_assoc(res, "AKWD", iString, sizeof(iString));
-	Player[playerid][AKillDGL] = strval(iString);
+	Player[playerid][AKillPNCH] = strval(iString);
+
+	// Load kills with M4
+	db_get_field_assoc(res, "AKWM", iString, sizeof(iString));
+	Player[playerid][AKillM] = strval(iString);
+
+	// Load kills with shotgun
+	db_get_field_assoc(res, "AKWSHT", iString, sizeof(iString));
+	Player[playerid][AKillSHT] = strval(iString);
+
+	// Load kills with spas
+	db_get_field_assoc(res, "AKWS", iString, sizeof(iString));
+	Player[playerid][AKillSP] = strval(iString);
+
+	// Load kills with punch
+	db_get_field_assoc(res, "AKWP", iString, sizeof(iString));
+	Player[playerid][AKillPNCH] = strval(iString);
+
+	// Load kills with snip
+	db_get_field_assoc(res, "AKWSN", iString, sizeof(iString));
+	Player[playerid][AKillSN] = strval(iString);
 
     // Check if player is ac-forced
     if(Player[playerid][AntiCheatForced] == 1) {
@@ -476,6 +501,11 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][ATDeaths]  =   Player[playerid][ATimeDeaths];
 			SaveVariables[i][ATDMG]		= 	Player[playerid][ATDMG];
 			SaveVariables[i][AKWD] 		= 	Player[playerid][AKillDGL];
+			SaveVariables[i][AKWM]		= 	Player[playerid][AKillM];
+			SaveVariables[i][AKWP]		= 	Player[playerid][AKillPNCH];
+			SaveVariables[i][AKWS]		=	Player[playerid][AKillSP];
+			SaveVariables[i][AKWSHT] 	=	Player[playerid][AKillSHT];
+			SaveVariables[i][AKWSN]		=	Player[playerid][AKillSN];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
@@ -565,6 +595,11 @@ StorePlayerVariables(playerid) {
 			SaveVariables[i][ATDeaths]  =   Player[playerid][ATimeDeaths];
 			SaveVariables[i][ATDMG]		= 	Player[playerid][ATDMG];
 			SaveVariables[i][AKWD]		= 	Player[playerid][AKillDGL];
+			SaveVariables[i][AKWM]		= 	Player[playerid][AKillM];
+			SaveVariables[i][AKWP]		= 	Player[playerid][AKillPNCH];
+			SaveVariables[i][AKWS]		=	Player[playerid][AKillSP];
+			SaveVariables[i][AKWSHT] 	=	Player[playerid][AKillSHT];
+			SaveVariables[i][AKWSN]		=	Player[playerid][AKillSN];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
@@ -666,6 +701,11 @@ LoadPlayerVariables(playerid)
 			 	Player[playerid][ATimeDeaths]		=   SaveVariables[i][ATDeaths];
 				Player[playerid][ATDMG]				=	SaveVariables[i][ATDMG];
 				Player[playerid][AKillDGL]			= 	SaveVariables[i][AKWD];
+				Player[playerid][AKillM]			=	SaveVariables[i][AKWM];
+				Player[playerid][AKillPNCH] 		=	SaveVariables[i][AKWP];
+				Player[playerid][AKillSP] 			= 	SaveVariables[i][AKWS];
+				Player[playerid][AKillSHT]			= 	SaveVariables[i][AKWSHT];
+				Player[playerid][AKillSN] 			= 	SaveVariables[i][AKWSN];
 
 				#if defined _league_included
 				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
@@ -703,6 +743,11 @@ LoadPlayerVariables(playerid)
 				Player[playerid][ATimeDeaths]		=   SaveVariables[i][ATDeaths];
 				Player[playerid][ATimeDMG] 			= 	SaveVariables[i][ATDMG];
 				Player[playerid][AKillDGL]			= 	SaveVariables[i][AKWD];
+				Player[playerid][AKillM]			=	SaveVariables[i][AKWM];
+				Player[playerid][AKillPNCH] 		=	SaveVariables[i][AKWP];
+				Player[playerid][AKillSP] 			= 	SaveVariables[i][AKWS];
+				Player[playerid][AKillSHT]			= 	SaveVariables[i][AKWSHT];
+				Player[playerid][AKillSN] 			= 	SaveVariables[i][AKWSN];
 				Player[playerid][RoundPlayed] 		= 	SaveVariables[i][TPlayed];
 				Player[playerid][Accuracy]      	=   SaveVariables[i][iAccuracy];
 			 	Player[playerid][TotalshotsHit]		=	SaveVariables[i][tshotsHit];
@@ -756,7 +801,12 @@ LoadPlayerVariables(playerid)
 			Player[playerid][ATimeKills]	=   SaveVariables[i][ATKills];
 			Player[playerid][ATimeDeaths]	=   SaveVariables[i][ATDeaths];
 			Player[playerid][ATimeDMG]		= 	SaveVariables[i][ATDMG];
-			Player[playerid][AKillDGL]			= 	SaveVariables[i][AKWD];
+			Player[playerid][AKillDGL]		= 	SaveVariables[i][AKWD];
+			Player[playerid][AKillM]		=	SaveVariables[i][AKWM];
+			Player[playerid][AKillPNCH]		=	SaveVariables[i][AKWP];
+			Player[playerid][AKillSP]		= 	SaveVariables[i][AKWS];
+			Player[playerid][AKillSHT]		= 	SaveVariables[i][AKWSHT];
+			Player[playerid][AKillSN] 		= 	SaveVariables[i][AKWSN];
 			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
 			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
 		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
