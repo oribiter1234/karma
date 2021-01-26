@@ -11140,27 +11140,36 @@ stock GetPlayerID(Names[])
 }
 stock UpdateLvl(playerid)
 {
+	new str[500];
     switch(Player[playerid][Exp])
 	{
         case 0..5: 
 		{
 			Player[playerid][Lvl] = 0;
 			SendClientMessageToAll(0xFFFFFF, "Lvl Up");
+			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
+			db_free_result(db_query(sqliteconnection, str));
 		}
         case 6..10: 
 		{
 			Player[playerid][Lvl] = 1;
 			SendClientMessageToAll(0xFFFFFF, "Lvl Up");
+			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
+			db_free_result(db_query(sqliteconnection, str));
 		}	
         case 11..15: 
 		{
 			Player[playerid][Lvl] = 2;
 			SendClientMessageToAll(0xFFFFFF,"Lvl Up");
+			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
+			db_free_result(db_query(sqliteconnection, str));
 		}	
 		case 16..21: 
 		{
 			Player[playerid][Lvl] = 3;
 			SendClientMessageToAll(0xFFFFFF,"Lvl Up");
+			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
+			db_free_result(db_query(sqliteconnection, str));
 		}	
     }
 	return 1;
