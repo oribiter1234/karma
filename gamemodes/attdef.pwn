@@ -638,22 +638,14 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				Player[killerid][AKillAK]++;
 				Player[killerid][Exp] += 5;
 			}
-			
-			if(Player[playerid][Exp] == 15)
-			{
-				Player[playerid][Lvl] == 2;
-			}
-			if(Player[playerid][Exp] == 25)
-			{
-				Player[playerid][Lvl] == 3;
-			}
+		
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
 			UpdateRoundKillDmgTDmg(killerid);
 
             OnPlayerAmmoUpdate(playerid);
-			
+			UpdateLvl(playerid);
 
 		}
 		else
@@ -11145,4 +11137,31 @@ stock GetPlayerID(Names[])
         if(!strcmp(Names, Player[i][pName])) return i;
     }    
     return -1;
+}
+stock UpdateLvl(playerid)
+{
+    switch(Player[playerid][Exp])
+	{
+        case 0..5: 
+		{
+			Player[playerid][Lvl] = 0;
+			SendClientMessageToAll(0xFFFFFF, "Lvl Up");
+		}
+        case 6..10: 
+		{
+			Player[playerid][Lvl] = 1;
+			SendClientMessageToAll(0xFFFFFF, "Lvl Up");
+		}	
+        case 11..15: 
+		{
+			Player[playerid][Lvl] = 2;
+			SendClientMessageToAll(0xFFFFFF,"Lvl Up");
+		}	
+		case 16..21: 
+		{
+			Player[playerid][Lvl] = 3;
+			SendClientMessageToAll(0xFFFFFF,"Lvl Up");
+		}	
+    }
+	return 1;
 }
