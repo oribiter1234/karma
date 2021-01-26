@@ -642,9 +642,9 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			{
 
 				case 0..5: Player[playerid][Lvl] = 1;
-				case 6..10: Player[playerid][Lvl] = 2;
-				case 1500..2999: Player[playerid][Lvl] = 3;
-				case 3000..4499: Player[playerid][Lvl] = 4;
+				case 6..15: Player[playerid][Lvl] = 2;
+				case 16..30: Player[playerid][Lvl] = 3;
+				case 31..40: Player[playerid][Lvl] = 4;
 				case 4500..5999: Player[playerid][Lvl] = 5;
 				case 6000..6999: Player[playerid][Lvl] = 6;
 				case 7000..7999: Player[playerid][Lvl] = 7;

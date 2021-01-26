@@ -520,6 +520,7 @@ StorePlayerVariablesMin(playerid) {
 			SaveVariables[i][AKWSHT] 	=	Player[playerid][AKillSHT];
 			SaveVariables[i][AKWSN]		=	Player[playerid][AKillSN];
 			SaveVariables[i][AKWAK]		=	Player[playerid][AKillAK];
+			SaveVariables[i][Exp]		= 	Player[playerid][Exp];
 			SaveVariables[i][TPlayed]   =   Player[playerid][RoundPlayed];
 			SaveVariables[i][sWasInBase] =  Player[playerid][WasInBase];
 			
@@ -722,6 +723,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][AKillSHT]			= 	SaveVariables[i][AKWSHT];
 				Player[playerid][AKillSN] 			= 	SaveVariables[i][AKWSN];
 				Player[playerid][AKillAK]			=	SaveVariables[i][AKWAK];
+				Player[playerid][Exp]				=	SaveVariables[i][Exp];
 
 				#if defined _league_included
 				PlayerShop[playerid][SHOP_POINTS_DOUBLER] = PlayerShopSaves[i][SHOP_POINTS_DOUBLER];
@@ -765,6 +767,7 @@ LoadPlayerVariables(playerid)
 				Player[playerid][AKillSHT]			= 	SaveVariables[i][AKWSHT];
 				Player[playerid][AKillSN] 			= 	SaveVariables[i][AKWSN];
 				Player[playerid][AKillAK]			=	SaveVariables[i][AKWAK];
+				Player[playerid][Exp]				=	SaveVariables[i][Exp];
 				Player[playerid][RoundPlayed] 		= 	SaveVariables[i][TPlayed];
 				Player[playerid][Accuracy]      	=   SaveVariables[i][iAccuracy];
 			 	Player[playerid][TotalshotsHit]		=	SaveVariables[i][tshotsHit];
@@ -825,6 +828,7 @@ LoadPlayerVariables(playerid)
 			Player[playerid][AKillSHT]		= 	SaveVariables[i][AKWSHT];
 			Player[playerid][AKillSN] 		= 	SaveVariables[i][AKWSN];
 			Player[playerid][AKillAK]			=	SaveVariables[i][AKWAK];
+			Player[playerid][Exp]				=	SaveVariables[i][Exp];
 			Player[playerid][RoundPlayed] 	= 	SaveVariables[i][TPlayed];
 			Player[playerid][Accuracy]      =   SaveVariables[i][iAccuracy];
 		 	Player[playerid][TotalshotsHit]	=	SaveVariables[i][tshotsHit];
