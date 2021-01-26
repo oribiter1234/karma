@@ -638,14 +638,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				Player[killerid][AKillAK]++;
 				Player[killerid][Exp] += 5;
 			}
-			if(Player[playerid][Exp] == 10)
-			{
-				Player[playerid][Lvl] = 1;
-			}
-			if(Player[playerid][Exp] == 20)
-			{
-				Player[playerid][Lvl] = 2;
-			}
+			
 		
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
@@ -653,6 +646,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			UpdateRoundKillDmgTDmg(killerid);
 
             OnPlayerAmmoUpdate(playerid);
+			UpdateLvl(playerid);
 		}
 		else
 		{
@@ -11143,4 +11137,17 @@ stock GetPlayerID(Names[])
         if(!strcmp(Names, Player[i][pName])) return i;
     }    
     return -1;
+}
+stock UpdateLvl(playerid) 
+{
+    switch(Player[playerid][Exp])
+	 {
+        case 0..10: Player[playerid][Lvl] = 1;
+        case 11..20: Player[playerid][Lvl] = 2;
+        case 21..30: Player[playerid][Lvl] = 3;
+        case 3000..4499: Player[playerid][Lvl] = 4;
+        case 4500..5999: Player[playerid][Lvl] = 5;
+        case 6000..6999: Player[playerid][Lvl] = 6;
+        case 7000..7999: Player[playerid][Lvl] = 7;
+    }
 }
