@@ -161,6 +161,8 @@ InitPlayerNames(playerid)
 InitPlayer(playerid)
 {
 	Player[playerid][Level] = 0;
+	Player[playerid][Lvl] = 0;
+	Player[playerid][Exp] = 0;
 	UpdatePlayerAdminGroup(playerid);
 	Player[playerid][Weather] = MainWeather;
 	Player[playerid][Time] = MainTime;
@@ -326,6 +328,13 @@ LoginPlayer(playerid, DBResult:res)
     Player[playerid][Level] = strval(iString);
 	UpdatePlayerAdminGroup(playerid);
 
+	// Load lvl
+    db_get_field_assoc(res, "Lvl", iString, sizeof(iString));
+    Player[playerid][Lvl] = strval(iString);
+
+	// Load exp
+    db_get_field_assoc(res, "Exp", iString, sizeof(iString));
+    Player[playerid][Exp] = strval(iString);
 	// Load Weather
 	db_get_field_assoc(res, "Weather", iString, sizeof(iString));
 	Player[playerid][Weather] = strval(iString);

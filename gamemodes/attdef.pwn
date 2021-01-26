@@ -606,31 +606,50 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			if(reason == WEAPON_DEAGLE)
 			{
 				Player[killerid][AKillDGL]++;
+				Player[killerid][Exp] += 5;
 			}
 			if(reason == WEAPON_M4)
 			{
 				Player[killerid][AKillM]++;
+				Player[killerid][Exp] += 5;
 			}
 			if(reason == WEAPON_SNIPER)
 			{
 				Player[killerid][AKillSN]++;
+				Player[killerid][Exp] += 5;
 			}
 			if(reason == WEAPON_SHOTGSPA)
 			{
 				Player[killerid][AKillSP]++;
+				Player[killerid][Exp] += 5;
 			}
 			if(reason == WEAPON_SHOTGUN)
 			{
 				Player[killerid][AKillSHT]++;
+				Player[killerid][Exp] += 5;
 			}
 			if(reason == WEAPON_RIFLE)
 			{
 				Player[killerid][AKillPNCH]++;
+				Player[killerid][Exp] += 5;
 			}
 			if(reason == WEAPON_AK47)
 			{
 				Player[killerid][AKillAK]++;
+				Player[killerid][Exp] += 5;
 			}
+			switch(Player[playerid][Exp]) 
+			{
+
+				case 0..5: Player[playerid][Lvl] = 1;
+				case 6..10: Player[playerid][Lvl] = 2;
+				case 1500..2999: Player[playerid][Lvl] = 3;
+				case 3000..4499: Player[playerid][Lvl] = 4;
+				case 4500..5999: Player[playerid][Lvl] = 5;
+				case 6000..6999: Player[playerid][Lvl] = 6;
+				case 7000..7999: Player[playerid][Lvl] = 7;
+			}
+		
 			new str[150];
 			format(str, sizeof(str), "%s%s {FFFFFF}killed %s%s {FFFFFF}with %s [%.1f ft] [%d HP]", TextColor[Player[killerid][Team]], Player[killerid][Name], TextColor[Player[playerid][Team]], Player[playerid][Name], WeaponNames[reason],GetDistanceBetweenPlayers(killerid, playerid), (Player[killerid][pHealth] + Player[killerid][pArmour]));
 			SendClientMessageToAll(-1, str);
@@ -4127,7 +4146,17 @@ YCMD:cmdhelp(playerid, params[], help)
     Command_ReProcess(playerid, params, true);
     return 1;
 }
-
+YCMD:levelinfo(playerid, params[], help)
+{
+	if(help)
+	{
+		SendCommandHelpMessage(playerid, "level info");
+		return 1;
+	}
+	new iString[128];
+	format(iString, sizeof(iString), "EXP: %d Level: %d", Player[playerid][Exp], Player[playerid][Lvl]);
+	SendClientMessage(playerid, 0xFFFFFF, iString);
+}
 YCMD:checkversion(playerid, params[])
 {
 	if(!VersionCheckerStatus)
