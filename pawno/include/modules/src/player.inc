@@ -161,7 +161,7 @@ InitPlayerNames(playerid)
 InitPlayer(playerid)
 {
 	Player[playerid][Level] = 0;
-	Player[playerid][Lvl] = 0;
+	Player[playerid][Lvl] = 1;
 	Player[playerid][Exp] = 0;
 	UpdatePlayerAdminGroup(playerid);
 	Player[playerid][Weather] = MainWeather;
