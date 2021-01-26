@@ -638,16 +638,13 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 				Player[killerid][AKillAK]++;
 				Player[killerid][Exp] += 5;
 			}
-			switch(Player[playerid][Exp]) 
+			if(Player[playerid][Exp] == 10)
 			{
-
-				case 0..5: Player[playerid][Lvl] = 1;
-				case 6..15: Player[playerid][Lvl] = 2;
-				case 16..30: Player[playerid][Lvl] = 3;
-				case 31..40: Player[playerid][Lvl] = 4;
-				case 4500..5999: Player[playerid][Lvl] = 5;
-				case 6000..6999: Player[playerid][Lvl] = 6;
-				case 7000..7999: Player[playerid][Lvl] = 7;
+				Player[playerid][Lvl] = 1;
+			}
+			if(Player[playerid][Exp] == 20)
+			{
+				Player[playerid][Lvl] = 2;
 			}
 		
 			new str[150];
