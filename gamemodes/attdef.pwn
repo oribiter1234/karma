@@ -645,7 +645,7 @@ public ServerOnPlayerDeath(playerid, killerid, reason)
 			UpdateRoundKillDmgTDmg(killerid);
 
             OnPlayerAmmoUpdate(playerid);
-			UpdateLvl(playerid);
+			UpdateLvl(killerid);
 
 		}
 		else
@@ -2097,7 +2097,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
             {
                 case 0:
                 {
-	                new statsSTR[7][300], namee[60], CID, Country[128], techInfo[100];
+	                new statsSTR[8][300], namee[60], CID, Country[128], techInfo[100];
 				    CID = LastClickedPlayer[playerid];
 
 					format(namee, sizeof(namee), "{FF3333}Player {FFFFFF}%s {FF3333}Stats", Player[CID][Name]);
@@ -2131,8 +2131,9 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 					format(statsSTR[4], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}All Time Kills: \t\t%d\t\t"COL_PRIM"- {FFFFFF}All Time Deaths: \t\t%d "COL_PRIM"- {FFFFFF}All Time DMG: \t\t%d\n", Player[CID][ATimeKills], Player[CID][ATimeDeaths], Player[CID][ATDMG]);
 					format(statsSTR[5], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Deagle: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Shotgun: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With M4: \t\t%d\n", Player[CID][AKillDGL], Player[CID][AKillSHT],Player[CID][AKillM]);
 					format(statsSTR[6], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}Kills With Sniper: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Spas: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With Rifle: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Kills With AK-47: \t\t%d\t\t", Player[CID][AKillSN], Player[CID][AKillSP], Player[CID][AKillPNCH], Player[CID][AKillAK]);
-					new TotalStr[1400];
-					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5],statsSTR[6]);
+					format(statsSTR[7], sizeof(statsSTR[]), ""COL_PRIM"- {FFFFFF}EXP: \t\t%d\t\t"COL_PRIM"- {FFFFFF}Lvl: \t\t%d\t\t", Player[CID][Exp], Player[CID][Lvl]);
+					new TotalStr[1500];
+					format(TotalStr, sizeof(TotalStr), "%s%s%s%s%s%s%s%s%s", techInfo, statsSTR[0], statsSTR[1], statsSTR[2], statsSTR[3], statsSTR[4],statsSTR[5],statsSTR[6], statsSTR[7]);
 
 					ShowPlayerDialog(playerid, DIALOG_CLICK_STATS, DIALOG_STYLE_MSGBOX, namee, TotalStr, "Close", "");
                 }
@@ -2246,6 +2247,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 		    Player[playerid][NetCheck] = 1;
 		    Player[playerid][DuelsWon] = 0;
 		    Player[playerid][DuelsLost] = 0;
+			Player[playerid][Lvl] = 1;
 			Player[playerid][ATimeDeaths] = 0;
 			Player[playerid][ATimeKills] = 0;
 			Player[playerid][ATimeDMG] = 0;
@@ -3623,7 +3625,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 killers {ffffff}(/tops)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 killers {ffffff}(/tops)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Killers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3651,7 +3653,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 deaths {ffffff}(/tops)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 deaths {ffffff}(/tops)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaths", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3681,7 +3683,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 damagers {ffffff}(/tops)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 damagers {ffffff}(/tops)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 damagers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3707,7 +3709,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 duelers {ffffff}(/tops)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 duelers {ffffff}(/tops)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 duelers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3743,7 +3745,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaglers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3769,7 +3771,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 snipers {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 snipers {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 snipers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3795,7 +3797,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 shotguns {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 shotguns {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 shotguns", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3821,7 +3823,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 m4's {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 m4's {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 m4's", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3847,7 +3849,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 Deaglers {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 Deaglers", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3873,7 +3875,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 rifles {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 rifles {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 rifles", fulldialog, "Select", "");
                     db_free_result(result);
@@ -3899,7 +3901,7 @@ public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
 						strcat(fulldialog, message);
 					
                     }
-					format(iString, sizeof(iString), "{ffffff}%s {ff9400} has watching top 10 ak-47 {ffffff}(/topweap)", Player[playerid][Name]);
+					format(iString, sizeof(iString), "{ffffff}%s {ff9400}has watching top 10 ak-47 {ffffff}(/topweap)", Player[playerid][Name]);
 					SendClientMessageToAll(-1, iString);
                     ShowPlayerDialog(playerid, DIALOG_NO_RESPONSE, DIALOG_STYLE_MSGBOX, "TOP 10 ak-47", fulldialog, "Select", "");
                     db_free_result(result);
@@ -11140,37 +11142,23 @@ stock GetPlayerID(Names[])
 }
 stock UpdateLvl(playerid)
 {
-	new str[500];
-    switch(Player[playerid][Exp])
-	{
-        case 0..5: 
-		{
-			Player[playerid][Lvl] = 0;
-			SendClientMessageToAll(0xFFFFFF, "Lvl Up");
-			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
-			db_free_result(db_query(sqliteconnection, str));
-		}
-        case 6..10: 
+	new iString[128];
+	switch(Player[playerid][Exp])
+    {
+
+        case 0..10:
 		{
 			Player[playerid][Lvl] = 1;
-			SendClientMessageToAll(0xFFFFFF, "Lvl Up");
-			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
-			db_free_result(db_query(sqliteconnection, str));
 		}	
-        case 11..15: 
+        case 11..15:
 		{
 			Player[playerid][Lvl] = 2;
-			SendClientMessageToAll(0xFFFFFF,"Lvl Up");
-			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
-			db_free_result(db_query(sqliteconnection, str));
 		}	
-		case 16..21: 
-		{
-			Player[playerid][Lvl] = 3;
-			SendClientMessageToAll(0xFFFFFF,"Lvl Up");
-			format(str, sizeof(str), "UPDATE Players SET Lvl = %d WHERE Name = '%q'", Player[playerid][Lvl], Player[playerid][Name]);
-			db_free_result(db_query(sqliteconnection, str));
-		}	
+        case 16..20: Player[playerid][Lvl] = 3;
+        case 21..25: Player[playerid][Lvl] = 4;
+        case 26..30: Player[playerid][Lvl] = 5;
+        case 31..35: Player[playerid][Lvl] = 6;
+        case 36..40: Player[playerid][Lvl] = 7;
     }
 	return 1;
 }
