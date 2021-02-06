@@ -150,7 +150,11 @@ public OnPlayerConnect(playerid)
 	    
         return 0;
 	}
-
+	new ip[16],
+    stringcheck[128];
+	GetPlayerIp(playerid, ip, sizeof(ip));
+	format(stringcheck, sizeof(stringcheck), "proxy.mind-media.com/block/proxycheck.php?ip=%s", ip);
+	HTTP(playerid, HTTP_GET, stringcheck, "", "CheckProxy");
 	// Initialize the new player
 	InitPlayer(playerid);
 	
@@ -11146,19 +11150,53 @@ stock UpdateLvl(playerid)
 	switch(Player[playerid][Exp])
     {
 
-        case 0..10:
+        case 0..100:
 		{
 			Player[playerid][Lvl] = 1;
 		}	
-        case 11..15:
+        case 101..200:
 		{
 			Player[playerid][Lvl] = 2;
 		}	
-        case 16..20: Player[playerid][Lvl] = 3;
-        case 21..25: Player[playerid][Lvl] = 4;
-        case 26..30: Player[playerid][Lvl] = 5;
-        case 31..35: Player[playerid][Lvl] = 6;
-        case 36..40: Player[playerid][Lvl] = 7;
+        case 201..300: 
+		{
+			Player[playerid][Lvl] = 3;
+		}	
+        case 301..400:
+		{
+			Player[playerid][Lvl] = 4;
+		}	
+        case 401..500: 
+		{
+			Player[playerid][Lvl] = 5;
+		}
+        case 501..600: 
+		{
+			Player[playerid][Lvl] = 6;
+		}
+        case 601..700: 
+		{
+			Player[playerid][Lvl] = 7;
+		}
     }
 	return 1;
+}
+forward CheckProxy(playerid, response_code, data[]);
+public CheckProxy(playerid, response_code, data[])
+{
+    new ip[16];
+	new string[128];
+    GetPlayerIp(playerid, ip, sizeof(ip));
+    if(strcmp(ip, "127.0.0.1", true) == 0) return 1;       
+    if(response_code == 200)
+    {
+        if(data[0] == 'Y')
+        {
+			format(string, sizeof(string), "%s this mother fucker tried using proxy fuck off", Player[playerid][Name]);
+            SendClientMessageToAll(0xFF0000FF, string);
+            Kick(playerid);
+            return 1;
+        }
+    }
+    return 1;
 }
